@@ -8,7 +8,7 @@ locals {
   firewall_ip_configurations = { for vnet_key, vnet_value in local.firewall_merged_ip_configurations : vnet_key =>
     { for ip_config_key, ip_config_value in vnet_value : ip_config_key => {
       name                 = try(ip_config_value.name == null ? ip_config_key : ip_config_value.name, ip_config_key)
-      public_ip_address_id = try(ip_config_value.public_ip_id == null ? module.fw_default_ips[ip_config_value.public_ip_key].public_ip_id : ip_config_value.public_ip_id)
+      public_ip_address_id = try(ip_config_value.public_ip_config.public_ip_id == null ? module.fw_default_ips[ip_config_value.public_ip_key].public_ip_id : ip_config_value.public_ip_config.public_ip_id)
       subnet_id            = ip_config_value.is_default ? module.hub_virtual_network_subnets[ip_config_value.subnet_key].resource_id : null
     } }
   }
